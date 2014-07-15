@@ -12,12 +12,12 @@ static int utmp_fd;
 static int cur_point;
 static int load_num;
 /**
-open file 
-*/
+  open file 
+ */
 int utmp_open(char* filename){
-   
-   utmp_fd= open(filename, O_RDONLY);
-   if(utmp_fd== -1)
+
+    utmp_fd= open(filename, O_RDONLY);
+    if(utmp_fd== -1)
         perror("can not open file");
 
     cur_point = load_num=0;
@@ -26,24 +26,21 @@ int utmp_open(char* filename){
 }
 
 struct utmp* load_next(){
-    
+
     if(cur_point == load_num && utmp_reload()==0){
         return NULLUT; 
     }
-
     return (struct utmp*)&utmpbuf[(cur_point++)*UT_SIZE];
 }
 /**
-load struct utmp of buff size
-*/
+  load struct utmp of buff size
+ */
 int utmp_reload(){
 
-   ssize_t read_total;
-   read_total=  read(utmp_fd,utmpbuf,UT_SIZE*BUFF_NUM);
+    ssize_t read_total;
+    read_total=  read(utmp_fd,utmpbuf,UT_SIZE*BUFF_NUM);
     load_num = read_total/UT_SIZE;
-    
     cur_point = 0;
-
     return read_total;
 }
 
