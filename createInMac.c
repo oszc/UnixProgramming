@@ -2,6 +2,6 @@
 //heihei
 int main(void){
 
-    printf("hello mac!");
+    printf("hello mac and hello ubuntu!");
     return 0;
 }
