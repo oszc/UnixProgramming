@@ -5,6 +5,7 @@
 #include<fcntl.h>
 #include<unistd.h>
 #include<dirent.h>
+#include<string.h>
 /***
 1.if has parent
      go to parent
@@ -15,12 +16,10 @@ ino_t getNodeIdFrom(char*);
 void inode_to_name(ino_t inode,char* buf,int buf_len);
 
 int main(int argc,char* argv[]){
-
     
     printPath(".");
     printf("\n");
     exit(1);
-
 
 }
 

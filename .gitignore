@@ -27,3 +27,6 @@ echostat
 listchars
 play_again
 play_again2
+debug_print
+my_alloc_test
+mypwd2
