@@ -11,70 +11,65 @@
      go to parent
   print current folder name
 */
-void printNodeName();
-ino_t getNodeId(char *file_path);
-char* getNodeName(ino_t nodetofind);
+#define BUF_LEN 256
+ino_t getNodeIdFrom(char*);
+void inode_to_name(ino_t inode,char* buf,int buf_len);
 
 int main(int argc,char* argv[]){
-
     
-    printNodeName(".");
+    printPath(".");
     printf("\n");
-    return 0;
-
+    exit(1);
 
 }
 
-void printNodeName(char* path){
+void printPath(char* filePath){
 
-    if(getNodeId("..")!=getNodeId(path)){
+    ino_t nodeId = getNodeIdFrom(filePath);
+    char buf[BUF_LEN];
+    if(nodeId!=getNodeIdFrom("..")){
     
-        chdir(".."); 
-        char* name = getNodeName(getNodeId(path));
-        printNodeName(path);
-        printf("/%s",name);
-    }    
+        if(chdir("..")==-1){
+            perror("chdir fail");
+            exit(1);
+        } 
 
-}
-
-ino_t getNodeId(char *file_path){
-
-    struct stat fileStat;
-
-    int ret= stat(file_path,&fileStat);
-   
-    if(ret == -1){
-        perror("can not read stat");
-        exit(1);
+        inode_to_name(nodeId,buf,BUF_LEN);
+        printPath(".");
+        printf("/%s",buf);
+         
     }
+}
+ino_t getNodeIdFrom(char *filePath){
 
-    printf("node id:%d\n",fileStat.st_ino);
-    return fileStat.st_ino;
-    
+  struct stat stat_buf;
+  if(stat(filePath,&stat_buf)==-1){
+    perror("can not stat");
+    exit(1);
+  }
+
+  return stat_buf.st_ino;
+
 }
 
-char* getNodeName(ino_t nodetofind){
+void inode_to_name(ino_t inode,char* buf,int buf_len){
 
-    
     DIR *dir = opendir(".");
     if(dir == NULL){
-        
+    
         perror("can not open dir");
         exit(1);
     
     }
-
-    struct dirent *dirent;
-
-    while ((dirent = readdir(dir))!=NULL){
-        
-        if(dirent->d_ino == nodetofind){
-            return dirent->d_name; 
-        }
     
+    struct dirent* direntP;
+
+    while((direntP=readdir(dir))!=NULL){
+    
+        if(direntP->d_ino==inode){
+            strncpy(buf,direntP->d_name,buf_len);
+            closedir(dir);
+            return;
+        } 
     }
-
-    return NULL;
-
-
 }
