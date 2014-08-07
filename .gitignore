@@ -32,3 +32,6 @@ my_alloc_test
 mypwd2
 sigdemo1
 hello1
+str_test
+strlen_test
+trim
