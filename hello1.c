@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Justin. All rights reserved.
 //
 
-#include <stdio.h>
-#include<curses.h>
+#include <curses.h>
+
 int main(int argc, const char * argv[])
 {
 
